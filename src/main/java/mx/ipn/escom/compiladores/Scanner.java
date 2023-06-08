@@ -48,11 +48,12 @@ public class Scanner {
         palabrasReservadas.put("<=", TipoToken.OP_MENOR_IGUAL_QUE);
         palabrasReservadas.put(">", TipoToken.MAYOR_QUE);
         palabrasReservadas.put(">=", TipoToken.OP_MAYOR_IGUAL_QUE);
-        palabrasReservadas.put("if", TipoToken.IDENTIFICADOR);
-        palabrasReservadas.put("print", TipoToken.IDENTIFICADOR);
-        palabrasReservadas.put("for", TipoToken.IDENTIFICADOR);
-        palabrasReservadas.put("return", TipoToken.IDENTIFICADOR);
-        palabrasReservadas.put("class", TipoToken.IDENTIFICADOR);
+        palabrasReservadas.put("if", TipoToken.IF);
+        palabrasReservadas.put("print", TipoToken.PRINT);
+        palabrasReservadas.put("for", TipoToken.FOR);
+        palabrasReservadas.put("return", TipoToken.RETURN);
+        palabrasReservadas.put("class", TipoToken.CLASS);
+        palabrasReservadas.put("while", TipoToken.WHILE);
         
         
         

@@ -17,10 +17,14 @@ public class Principal {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
 
-        for(;;){
-            System.out.print(">>> ");
+        while (true) {
+            System.out.print(">>>>> ");
             String linea = reader.readLine();
-            if(linea == null) break; // Presionar Ctrl + D
+            
+            if (linea == null){
+                break; // Presionar Ctrl + D
+            }
+            
             ejecutar(linea);
             existenErrores = false;
         }
@@ -33,16 +37,21 @@ public class Principal {
         for(Token token : tokens){
             System.out.println(token);
         }
-
-        //Parser parser = new Parser(tokens);
-        //parser.parse();
+        try{
+        Parser parser = new Parser(tokens);
+        parser.parse();
+        if(parser.esValida){
+            System.out.print("\n------->Cadena valida\n\n");
+        }
+        }catch(IndexOutOfBoundsException e){
+            System.out.print("\n------->Cadena no Valida\n\n");
+        }catch(StackOverflowError e){
+            System.out.print("\n------->Cadena no Valida\n\n");
+        }
+        
+        
     }
 
-    /*
-    El método error se puede usar desde las distintas clases
-    para reportar los errores:
-    Interprete.error(....);
-     */
     static void error(int linea, String mensaje){
         reportar(linea, "", mensaje);
     }
