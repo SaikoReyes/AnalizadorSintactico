@@ -24,21 +24,20 @@ public class Parser {
     }
 
         private void DECLARATION() {
-//            System.out.println(tokens.get(currentPosition));
+            
         if (comparar(TipoToken.CLASS)) {
             CLASS_DECL();
-            //DECLARATION();
+            DECLARATION();
         }else if (comparar(TipoToken.FUN)) {
             FUN_DECL();
-            //DECLARATION();
+            DECLARATION();
         } else if (comparar(TipoToken.VAR)) {
             VAR_DECL();
-            //DECLARATION();
+            DECLARATION();
         } 
-        else if (comparar(TipoToken.RETURN)){
+        else {
             
-            STATEMENT();
-         
+            STATEMENT();         
         }
     }
 
@@ -52,66 +51,54 @@ public class Parser {
     }
 
     private void CLASS_INHER() {
-        if (comparar(TipoToken.OP_MENOR_IGUAL_QUE)) {
-            match(TipoToken.OP_MENOR_IGUAL_QUE);
+        if (comparar(TipoToken.MENOR_QUE)) {
+            match(TipoToken.MENOR_QUE);
             match(TipoToken.IDENTIFICADOR);
         }
     }
-    private void FUN2_2(){
-        if(comparar(TipoToken.CADENA)){
-            match(TipoToken.CADENA);
-            EXPRESSION();
-        }
-        if(comparar(TipoToken.RETURN)){
-            match(TipoToken.RETURN);
-            RETURN_STMT();
-        }
-    }
-    
 
     private void FUN_DECL() {
         match(TipoToken.FUN);
-        match(TipoToken.CADENA);
-        match(TipoToken.PARENTESIS_IZQ);
-        PARAMETERS_OPC();
-        match(TipoToken.PARENTESIS_DER);
-        match(TipoToken.LLAVE_IZQ);
-        //System.out.println(tokens.get(currentPosition));
-        //match(TipoToken.LLAVE_DER);
-        //match(TipoToken.CADENA);
-        //FUNCTION();
+        FUNCTION();
     }
 
     private void VAR_DECL() {
         match(TipoToken.VAR);
-        match(TipoToken.CADENA);
+        match(TipoToken.IDENTIFICADOR);
         VAR_INIT();
         match(TipoToken.PUNTO_COMA);
     }
 
     private void VAR_INIT() {
-        if (comparar(TipoToken.IGUAL_QUE)) {
-            match(TipoToken.IGUAL_QUE);
-            EXPRESSION();
-           
-        }
+    if (comparar(TipoToken.IGUAL_QUE)) {
+        match(TipoToken.IGUAL_QUE);
+        EXPRESSION();
     }
+    
+}
+
 
     private void STATEMENT() {
-        if (comparar(TipoToken.PARENTESIS_IZQ)) {
-            EXPR_STMT();
-        } else if (comparar(TipoToken.FOR)) {
+        //System.out.println("Ayuda");
+        if(comparar(TipoToken.PARENTESIS_IZQ)){
+            
+            EXPR_STMT();            
+        }
+        else if (comparar(TipoToken.FOR)) {
+            
             FOR_STMT();
         } else if (comparar(TipoToken.IF)) {
+            
             IF_STMT();
         } else if (comparar(TipoToken.PRINT)) {
+            
+            
             PRINT_STMT();
         } else if (comparar(TipoToken.RETURN)) {
+            
             RETURN_STMT();
         }  else if (comparar(TipoToken.LLAVE_IZQ)) {
             BLOCK();
-        }else if(comparar(TipoToken.CADENA)){
-            EXPRESSION();
         }
     }
 
@@ -121,7 +108,7 @@ public class Parser {
     }
 
     private void FOR_STMT() {
-        match(TipoToken.IDENTIFICADOR);
+        match(TipoToken.FOR);
         match(TipoToken.PARENTESIS_IZQ);
         FOR_STMT_1();
         FOR_STMT_2();
@@ -136,17 +123,23 @@ public class Parser {
         } else {
             EXPR_STMT();
         }
-        match(TipoToken.PUNTO_COMA);
+        
+        System.out.println(tokens.get(currentPosition));
+        
     }
 
     private void FOR_STMT_2() {
-        EXPRESSION();
-        match(TipoToken.PUNTO_COMA);
+    
+        if(!comparar(TipoToken.PUNTO_COMA)){
+            EXPRESSION();
+            match(TipoToken.PUNTO_COMA);
+        }
     }
 
    
 
  private void FOR_STMT_3() {
+     
         if (!comparar(TipoToken.PARENTESIS_DER)) {
             EXPRESSION();
         }
@@ -196,13 +189,13 @@ public class Parser {
     }
 
     private void BLOCK_DECL() {
-        System.out.println(tokens.get(currentPosition));
-        if (!comparar(TipoToken.LLAVE_DER)) {
-            
-            DECLARATION();
-            
-            BLOCK_DECL();
-        }
+
+        
+    if (!comparar(TipoToken.LLAVE_DER)) {
+        DECLARATION();
+        BLOCK_DECL();
+    
+    }
     }
 
     private void EXPRESSION() {
@@ -210,24 +203,27 @@ public class Parser {
     }
 
     private void ASSIGNMENT() {
+        
+        CALL_OPC();
+        
+        
+        if(comparar(TipoToken.IDENTIFICADOR)){
+            
+            match(TipoToken.IDENTIFICADOR);
+            match(TipoToken.IGUAL_QUE);
+            
+            ASSIGNMENT();
+        }
+        
+        
         LOGIC_OR();
-        ASSIGNMENT_OPC();
-    }
-
-    private void ASSIGNMENT_OPC() {
-        if (comparar(TipoToken.NUMERO)) {
-            match(TipoToken.NUMERO);
-            EXPRESSION();
-        }
-        if (comparar(TipoToken.CADENA)) {
-            match(TipoToken.CADENA);
-            EXPRESSION();
-        }
-        //match(TipoToken.PUNTO_COMA);
         
     }
 
+    
+
     private void LOGIC_OR() {
+        
         LOGIC_AND();
         LOGIC_OR_2();
     }
@@ -263,14 +259,15 @@ public class Parser {
             match(TipoToken.OP_DIFERENTE);
             COMPARISON();
             EQUALITY_2();
-        } else if (comparar(TipoToken.OP_IGUAL_QUE)) {
-            match(TipoToken.OP_IGUAL_QUE);
+        } else if (comparar(TipoToken.IGUAL_QUE)) {
+            match(TipoToken.IGUAL_QUE);
             COMPARISON();
             EQUALITY_2();
         }
     }
 
     private void COMPARISON() {
+        
         TERM();
         COMPARISON_2();
     }
@@ -278,21 +275,35 @@ public class Parser {
     private void COMPARISON_2() {
         
         if (comparar(TipoToken.MAYOR_QUE)) {
-            match(TipoToken.MAYOR_QUE);
-            TERM();
-            COMPARISON_2();
-        } else if (comparar(TipoToken.OP_MAYOR_IGUAL_QUE)) {
-            match(TipoToken.OP_MAYOR_IGUAL_QUE);
-            TERM();
-            COMPARISON_2();
-        } else if (comparar(TipoToken.MENOR_QUE)) {
-            match(TipoToken.MENOR_QUE);
-            TERM();
-            COMPARISON_2();
-        } else if (comparar(TipoToken.OP_MENOR_IGUAL_QUE)) {
-            match(TipoToken.OP_MENOR_IGUAL_QUE);
-            TERM();
-            COMPARISON_2();
+            if(tokens.get(currentPosition+1).lexema.equals("=")){
+                match(TipoToken.MAYOR_QUE);
+                match(TipoToken.IGUAL_QUE);
+                TERM();
+                COMPARISON_2();
+                
+            }else{
+                match(TipoToken.MAYOR_QUE);
+                TERM();
+                COMPARISON_2();
+            }
+            
+        } 
+        else if (comparar(TipoToken.MENOR_QUE)) {
+            
+            if(tokens.get(currentPosition+1).lexema.equals("=")){
+                match(TipoToken.MENOR_QUE);
+                match(TipoToken.IGUAL_QUE);
+                TERM();
+                COMPARISON_2();
+                
+            }else{
+                match(TipoToken.MENOR_QUE);
+                TERM();
+                COMPARISON_2();
+            }
+            
+            
+            
         }
     }
 
@@ -343,7 +354,7 @@ public class Parser {
     }
 
     private void CALL() {
-        //PRIMARY();
+        PRIMARY();
         CALL_2();
     }
 
@@ -355,14 +366,51 @@ public class Parser {
             CALL_2();
         } else if (comparar(TipoToken.PUNTO)) {
             match(TipoToken.PUNTO);
-            match(TipoToken.CADENA);
+            match(TipoToken.IDENTIFICADOR);
             CALL_2();
+        }
+    }
+    
+    private void CALL_OPC(){
+        CALL();
+        if(comparar(TipoToken.PUNTO)){
+            match(TipoToken.PUNTO);
         }
     }
 
     private void ARGUMENTS_OPC() {
         if (!comparar(TipoToken.PARENTESIS_DER)) {
             ARGUMENTS();
+        }
+    }
+    private void PRIMARY(){
+        if(comparar(TipoToken.TRUE)){
+            match(TipoToken.TRUE);
+        }
+        else if(comparar(TipoToken.FALSE)){
+            match(TipoToken.FALSE);
+        }
+        else if(comparar(TipoToken.NULL)){
+            match(TipoToken.NULL);
+        }
+        else if(comparar(TipoToken.NUMERO)){
+            match(TipoToken.NUMERO);
+        }
+        else if(comparar(TipoToken.STRING)){
+            match(TipoToken.STRING);
+        }
+        else if(comparar(TipoToken.IDENTIFICADOR)){
+            match(TipoToken.IDENTIFICADOR);
+        }
+        else if(comparar(TipoToken.PARENTESIS_IZQ)){
+            match(TipoToken.PARENTESIS_IZQ);
+            EXPRESSION();
+            match(TipoToken.PARENTESIS_DER);
+        }
+        else if(comparar(TipoToken.SUPER)){
+            match(TipoToken.SUPER);
+            match(TipoToken.PUNTO);
+            match(TipoToken.IDENTIFICADOR);
         }
     }
 
@@ -381,7 +429,7 @@ public class Parser {
 
     private void FUNCTION() {
         
-        match(TipoToken.CADENA);
+        match(TipoToken.IDENTIFICADOR);
         
         match(TipoToken.PARENTESIS_IZQ);
         
@@ -405,7 +453,7 @@ public class Parser {
     }
 
     private void PARAMETERS() {
-        match(TipoToken.CADENA);
+        match(TipoToken.IDENTIFICADOR);
         
         PARAMETERS_2();
     }
@@ -414,7 +462,7 @@ public class Parser {
         if (comparar(TipoToken.COMA)) {
             match(TipoToken.COMA);
             
-            match(TipoToken.CADENA);
+            match(TipoToken.IDENTIFICADOR);
             PARAMETERS_2();
             
         }

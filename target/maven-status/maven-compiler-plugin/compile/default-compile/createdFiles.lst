@@ -2,3 +2,4 @@ mx/ipn/escom/compiladores/TipoToken.class
 mx/ipn/escom/compiladores/Token.class
 mx/ipn/escom/compiladores/Scanner.class
 mx/ipn/escom/compiladores/Principal.class
+mx/ipn/escom/compiladores/Parser.class

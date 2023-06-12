@@ -16,18 +16,20 @@ public class Principal {
     private static void ejecutarPrompt() throws IOException{
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
-
+        String conjunto="";
         while (true) {
-            System.out.print(">>>>> ");
+            System.out.print(">>");
             String linea = reader.readLine();
             
-            if (linea == null){
+            if (linea == null||linea.equals("salir")){
                 break; // Presionar Ctrl + D
             }
             
-            ejecutar(linea);
+            
             existenErrores = false;
+            ejecutar(linea);
         }
+        
     }
 
     private static void ejecutar(String source){
@@ -37,17 +39,17 @@ public class Principal {
         for(Token token : tokens){
             System.out.println(token);
         }
-//        try{
-//        Parser parser = new Parser(tokens);
-//        parser.parse();
-//        if(parser.esValida){
-//            System.out.print("\n------->Cadena valida\n\n");
-//        }
-//        }catch(IndexOutOfBoundsException e){
-//            System.out.print("\n------->Cadena no Valida\n\n");
-//        }catch(StackOverflowError e){
-//            System.out.print("\n------->Cadena no Valida\n\n");
-//        }
+        try{
+        Parser parser = new Parser(tokens);
+        parser.parse();
+        if(parser.esValida){
+            System.out.print("\n------->Cadena valida\n\n");
+        }
+        }catch(IndexOutOfBoundsException e){
+            System.out.print("\n------->Cadena no Valida\n\n");
+        }catch(StackOverflowError e){
+            System.out.print("\n------->Cadena no Valida\n\n");
+        }
         
         
     }
