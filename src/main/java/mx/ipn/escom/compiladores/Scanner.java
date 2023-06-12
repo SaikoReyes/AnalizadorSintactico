@@ -79,8 +79,13 @@ public class Scanner {
                         posicionActual++;
                         //System.out.println(source.charAt(posicionActual));
                         if(source.charAt(posicionActual)=='*'&&source.charAt(posicionActual+1)=='/'){
-                            posicionActual=posicionActual+2;
-                            break;
+                            if(source.charAt(posicionActual+2)=='\0'){
+                                posicionActual++;
+                                break;
+                            }else{
+                                posicionActual=posicionActual+2;
+                                break;
+                            }
                         }
                     }
                 }
