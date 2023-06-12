@@ -3,6 +3,9 @@ package mx.ipn.escom.compiladores;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Principal {
@@ -10,7 +13,23 @@ public class Principal {
     static boolean existenErrores = false;
 
     public static void main(String[] args) throws IOException {
-        ejecutarPrompt();
+        if(args.length>1){
+            System.exit(64);
+        }else if (args.length==1){
+            ejecutarArchivo(args[0]);
+        }else{
+            ejecutarPrompt();
+        }
+        
+    }
+    
+    private static void ejecutarArchivo(String path) throws IOException{
+        byte[] bytes = Files.readAllBytes(Paths.get(path));
+        ejecutar(new String(bytes, Charset.defaultCharset()));
+        
+        if(existenErrores){
+            System.exit(65);
+        }
     }
 
     private static void ejecutarPrompt() throws IOException{
@@ -25,9 +44,9 @@ public class Principal {
                 break; // Presionar Ctrl + D
             }
             
-            
-            existenErrores = false;
             ejecutar(linea);
+            existenErrores = false;
+            
         }
         
     }

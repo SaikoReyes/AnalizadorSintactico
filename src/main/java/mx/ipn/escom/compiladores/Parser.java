@@ -92,12 +92,20 @@ public class Parser {
             IF_STMT();
         } else if (comparar(TipoToken.PRINT)) {
             
+            if(tokens.get(currentPosition-1).tipo==TipoToken.PARENTESIS_DER){
+                
+                match(TipoToken.LLAVE_IZQ);
+            }else{
+                
+                PRINT_STMT();
+            }
             
-            PRINT_STMT();
+            
         } else if (comparar(TipoToken.RETURN)) {
             
             RETURN_STMT();
         }  else if (comparar(TipoToken.LLAVE_IZQ)) {
+            
             BLOCK();
         }
     }
@@ -114,6 +122,7 @@ public class Parser {
         FOR_STMT_2();
         FOR_STMT_3();
         match(TipoToken.PARENTESIS_DER);
+        
         STATEMENT();
     }
 

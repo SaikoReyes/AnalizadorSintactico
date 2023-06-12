@@ -72,7 +72,20 @@ public class Scanner {
                 // Escanear cadena entre comillas
                 String cadena = escanearCadena();
                 tokens.add(new Token(TipoToken.CADENA, cadena, posicionActual));
-            } else {
+            } else if(caracterActual == '/'){
+                if(source.charAt(posicionActual+1)=='*'){
+                    posicionActual++;
+                    while(true){
+                        posicionActual++;
+                        //System.out.println(source.charAt(posicionActual));
+                        if(source.charAt(posicionActual)=='*'&&source.charAt(posicionActual+1)=='/'){
+                            posicionActual=posicionActual+2;
+                            break;
+                        }
+                    }
+                }
+                
+            }else {
                 // Tratar el caracter como un carácter no reservado
                 tokens.add(crearToken(String.valueOf(caracterActual)));
                 posicionActual++;
@@ -133,6 +146,7 @@ public class Scanner {
             return new Token(TipoToken.IDENTIFICADOR, lexema, posicionActual);
         }
     }
+    
     
     public static boolean isNumeric(String str) {
         try {

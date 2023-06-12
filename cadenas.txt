@@ -1,0 +1,2 @@
+/* Código para calcula la serie de Fibonacci */ var fib = 0; var lim = 10; 
+var aux = 1;
