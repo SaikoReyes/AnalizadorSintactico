@@ -25,29 +25,25 @@ public class Parser {
 
         private void DECLARATION() {
 //            System.out.println(tokens.get(currentPosition));
-        if (comparar(TipoToken.CLASE)) {
+        if (comparar(TipoToken.CLASS)) {
             CLASS_DECL();
             //DECLARATION();
-        }else if (comparar(TipoToken.RETURN)){
-            
-            STATEMENT();
-         
         }else if (comparar(TipoToken.FUN)) {
             FUN_DECL();
             //DECLARATION();
         } else if (comparar(TipoToken.VAR)) {
             VAR_DECL();
             //DECLARATION();
-        } else if (comparar(TipoToken.PRINT)) {
+        } 
+        else if (comparar(TipoToken.RETURN)){
+            
             STATEMENT();
-//            DECLARATION();
-        } else if(comparar(TipoToken.CADENA)){
-            STATEMENT();
+         
         }
     }
 
     private void CLASS_DECL() {
-        match(TipoToken.CLASE);
+        match(TipoToken.CLASS);
         match(TipoToken.IDENTIFICADOR);
         CLASS_INHER();
         match(TipoToken.LLAVE_IZQ);
@@ -112,9 +108,7 @@ public class Parser {
             PRINT_STMT();
         } else if (comparar(TipoToken.RETURN)) {
             RETURN_STMT();
-        } else if (comparar(TipoToken.WHILE)) {
-            WHILE_STMT();
-        } else if (comparar(TipoToken.LLAVE_IZQ)) {
+        }  else if (comparar(TipoToken.LLAVE_IZQ)) {
             BLOCK();
         }else if(comparar(TipoToken.CADENA)){
             EXPRESSION();
@@ -193,13 +187,6 @@ public class Parser {
         }
     }
 
-    private void WHILE_STMT() {
-        match(TipoToken.MIENTRAS);
-        match(TipoToken.PARENTESIS_IZQ);
-        EXPRESSION();
-        match(TipoToken.PARENTESIS_DER);
-        STATEMENT();
-    }
 
     private void BLOCK() {
         match(TipoToken.LLAVE_IZQ);

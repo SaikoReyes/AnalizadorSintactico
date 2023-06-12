@@ -37,17 +37,17 @@ public class Principal {
         for(Token token : tokens){
             System.out.println(token);
         }
-        try{
-        Parser parser = new Parser(tokens);
-        parser.parse();
-        if(parser.esValida){
-            System.out.print("\n------->Cadena valida\n\n");
-        }
-        }catch(IndexOutOfBoundsException e){
-            System.out.print("\n------->Cadena no Valida\n\n");
-        }catch(StackOverflowError e){
-            System.out.print("\n------->Cadena no Valida\n\n");
-        }
+//        try{
+//        Parser parser = new Parser(tokens);
+//        parser.parse();
+//        if(parser.esValida){
+//            System.out.print("\n------->Cadena valida\n\n");
+//        }
+//        }catch(IndexOutOfBoundsException e){
+//            System.out.print("\n------->Cadena no Valida\n\n");
+//        }catch(StackOverflowError e){
+//            System.out.print("\n------->Cadena no Valida\n\n");
+//        }
         
         
     }

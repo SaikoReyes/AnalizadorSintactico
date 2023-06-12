@@ -14,21 +14,8 @@ public class Scanner {
     private static final Map<String, TipoToken> palabrasReservadas;
     static {
         palabrasReservadas = new HashMap<>();
-        palabrasReservadas.put("y", TipoToken.Y);
-        palabrasReservadas.put("clase", TipoToken.CLASE);
-        palabrasReservadas.put("ademas", TipoToken.ADEMAS);
-        palabrasReservadas.put("falso", TipoToken.FALSO);
-        palabrasReservadas.put("para", TipoToken.PARA);
-        palabrasReservadas.put("fun", TipoToken.FUN);
-        palabrasReservadas.put("si", TipoToken.SI);
-        palabrasReservadas.put("nulo", TipoToken.NULO);
-        palabrasReservadas.put("imprimir", TipoToken.IMPRIMIR);
-        palabrasReservadas.put("retornar", TipoToken.RETORNAR);
-        palabrasReservadas.put("super", TipoToken.SUPER);
-        palabrasReservadas.put("este", TipoToken.ESTE);
-        palabrasReservadas.put("verdadero", TipoToken.VERDADERO);
+        
         palabrasReservadas.put("var", TipoToken.VAR);
-        palabrasReservadas.put("mientras", TipoToken.MIENTRAS);
         palabrasReservadas.put(")", TipoToken.PARENTESIS_DER);
         palabrasReservadas.put("(", TipoToken.PARENTESIS_IZQ);
         palabrasReservadas.put("}", TipoToken.LLAVE_DER);
@@ -54,39 +41,38 @@ public class Scanner {
         palabrasReservadas.put("return", TipoToken.RETURN);
         palabrasReservadas.put("class", TipoToken.CLASS);
         palabrasReservadas.put("while", TipoToken.WHILE);
+        palabrasReservadas.put("fun", TipoToken.FUN);
         
         
         
     }
+    
+    
 
     Scanner(String source){
         this.source = source + " ";
         this.posicionActual = 0;
     }
 
-    List<Token> scanTokens(){
-        /*int estado = 0;
-        char caracter = 0;
-        String lexema = "";
-        int inicioLexema = 0;*/
-        
-        
-
+    List<Token> scanTokens() {
         while (posicionActual < source.length()) {
             char caracterActual = source.charAt(posicionActual);
-            
 
             if (esCaracterIgnorable(caracterActual)) {
                 // Ignorar el caracter y avanzar a la siguiente posición
                 posicionActual++;
-            }else if (esInicioDePalabra(caracterActual)) {
+            } else if (esInicioDePalabra(caracterActual)) {
                 // Escanear la palabra
                 String palabra = escanearPalabra();
                 tokens.add(crearToken(palabra));
-            } else if(esNumero(caracterActual)){
+            } else if (esNumero(caracterActual)) {
                 String palabra = escanearPalabra();
                 tokens.add(crearToken(palabra));
-            }else {
+            } else if (caracterActual == '"') {
+                // Escanear cadena entre comillas
+                String cadena = escanearCadena();
+                tokens.add(new Token(TipoToken.CADENA, cadena, posicionActual));
+            } else {
                 // Tratar el caracter como un carácter no reservado
                 tokens.add(crearToken(String.valueOf(caracterActual)));
                 posicionActual++;
@@ -119,15 +105,32 @@ public class Scanner {
         }
         return source.substring(inicio, posicionActual);
     }
+    private String escanearCadena() {
+        int inicio = posicionActual + 1; // Ignorar el primer "
+        posicionActual++; // Avanzar a la siguiente posición
+
+        while (posicionActual < source.length() && source.charAt(posicionActual) != '"') {
+            posicionActual++;
+        }
+
+        String cadena = source.substring(inicio, posicionActual);
+        posicionActual++; // Avanzar a la posición después del último "
+
+        return cadena;
+    }
 
     private Token crearToken(String lexema) {
         if (palabrasReservadas.containsKey(lexema)) {
             TipoToken tipo = palabrasReservadas.get(lexema);
             return new Token(tipo, lexema, posicionActual);
-        } else if(isNumeric(lexema)){
+        } else if (isNumeric(lexema)) {
             return new Token(TipoToken.NUMERO, lexema, posicionActual);
-        }else {
-            return new Token(TipoToken.CADENA, lexema, posicionActual);
+        } else if (lexema.equals("class")) {
+            return new Token(TipoToken.CLASS, lexema, posicionActual);
+        } else if (lexema.equals("fun")) {
+            return new Token(TipoToken.FUN, lexema, posicionActual);
+        } else {
+            return new Token(TipoToken.IDENTIFICADOR, lexema, posicionActual);
         }
     }
     
