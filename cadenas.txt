@@ -1,1 +1,3 @@
-/* Código para calcula la serie de Fibonacci */ var fib = 0; var lim = 10; var aux = 1;
+class Perro < Animal { ladrar(){ print "Guauuu";} comer(){ while(tanque < 100){ tanque = tanque + 1;}}}fun crearPerro(){ perro =Perro();perror.ladrar();}crearPerro();
+
+

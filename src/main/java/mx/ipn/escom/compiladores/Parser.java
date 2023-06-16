@@ -35,9 +35,11 @@ public class Parser {
             VAR_DECL();
             DECLARATION();
         } 
-        else {
-            
+        else if(comparar(TipoToken.IF)||comparar(TipoToken.WHILE)||comparar(TipoToken.FOR)||
+                comparar(TipoToken.PRINT)||comparar(TipoToken.RETURN)||comparar(TipoToken.IF)||
+                comparar(TipoToken.IDENTIFICADOR)){
             STATEMENT();         
+            DECLARATION();
         }
     }
 
@@ -79,8 +81,7 @@ public class Parser {
 
 
     private void STATEMENT() {
-        //System.out.println("Ayuda");
-        if(comparar(TipoToken.PARENTESIS_IZQ)){
+        if(comparar(TipoToken.PARENTESIS_IZQ)||comparar(TipoToken.IDENTIFICADOR)){
             
             EXPR_STMT();            
         }
@@ -91,21 +92,12 @@ public class Parser {
             
             IF_STMT();
         } else if (comparar(TipoToken.PRINT)) {
-            
-            if(tokens.get(currentPosition-1).tipo==TipoToken.PARENTESIS_DER){
-                
-                match(TipoToken.LLAVE_IZQ);
-            }else{
-                
                 PRINT_STMT();
-            }
-            
             
         } else if (comparar(TipoToken.RETURN)) {
             
             RETURN_STMT();
         }  else if (comparar(TipoToken.LLAVE_IZQ)) {
-            
             BLOCK();
         }
     }
@@ -121,37 +113,36 @@ public class Parser {
         FOR_STMT_1();
         FOR_STMT_2();
         FOR_STMT_3();
-        match(TipoToken.PARENTESIS_DER);
-        
+        match(TipoToken.PARENTESIS_DER);        
         STATEMENT();
     }
 
     private void FOR_STMT_1() {
         if (comparar(TipoToken.VAR)) {
             VAR_DECL();
+        } else if(comparar(TipoToken.PUNTO_COMA)){
+            match(TipoToken.PUNTO_COMA);
         } else {
             EXPR_STMT();
-        }
-        
-        System.out.println(tokens.get(currentPosition));
+        } 
         
     }
 
     private void FOR_STMT_2() {
-    
         if(!comparar(TipoToken.PUNTO_COMA)){
             EXPRESSION();
-            match(TipoToken.PUNTO_COMA);
         }
+        match(TipoToken.PUNTO_COMA);
+
     }
 
    
 
- private void FOR_STMT_3() {
-     
-        if (!comparar(TipoToken.PARENTESIS_DER)) {
-            EXPRESSION();
-        }
+ private void FOR_STMT_3() {     
+            if (!comparar(TipoToken.PARENTESIS_DER)) {
+                EXPRESSION();
+    }
+        
     }
 
     private void IF_STMT() {
@@ -171,7 +162,7 @@ public class Parser {
         }
     }
 
-    private void PRINT_STMT() {
+        private void PRINT_STMT() {
         match(TipoToken.PRINT);
         EXPRESSION();
         match(TipoToken.PUNTO_COMA);
@@ -213,19 +204,24 @@ public class Parser {
 
     private void ASSIGNMENT() {
         
-        CALL_OPC();
+        LOGIC_OR();
         
         
-        if(comparar(TipoToken.IDENTIFICADOR)){
-            
-            match(TipoToken.IDENTIFICADOR);
-            match(TipoToken.IGUAL_QUE);
-            
-            ASSIGNMENT();
+        ASSIGNMENT_OPC();
+        
+        
+        
+        
+    }
+    private void ASSIGNMENT_OPC() {
+        
+        if(comparar(TipoToken.IGUAL_QUE)){
+           match(TipoToken.IGUAL_QUE);
+           EXPRESSION();
         }
         
         
-        LOGIC_OR();
+        
         
     }
 
@@ -382,9 +378,9 @@ public class Parser {
     
     private void CALL_OPC(){
         CALL();
-        if(comparar(TipoToken.PUNTO)){
-            match(TipoToken.PUNTO);
-        }
+        
+        match(TipoToken.PUNTO);
+        
     }
 
     private void ARGUMENTS_OPC() {
@@ -402,11 +398,14 @@ public class Parser {
         else if(comparar(TipoToken.NULL)){
             match(TipoToken.NULL);
         }
+        else if(comparar(TipoToken.THIS)){
+            match(TipoToken.THIS);
+        }
         else if(comparar(TipoToken.NUMERO)){
             match(TipoToken.NUMERO);
         }
-        else if(comparar(TipoToken.STRING)){
-            match(TipoToken.STRING);
+        else if(comparar(TipoToken.CADENA)){
+            match(TipoToken.CADENA);
         }
         else if(comparar(TipoToken.IDENTIFICADOR)){
             match(TipoToken.IDENTIFICADOR);
@@ -444,7 +443,6 @@ public class Parser {
         
         PARAMETERS_OPC();
         match(TipoToken.PARENTESIS_DER);
-        //System.out.println(tokens.get(currentPosition)+"Holaaa");
         BLOCK();
     }
 
